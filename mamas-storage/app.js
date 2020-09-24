@@ -4,6 +4,8 @@ var storage = new inMemoryStorage.InMemoryStorage()
 
 storage.create("users", {username: "dar", password: "CorHorse4"})
 
-console.log(storage.find("users", (u) => {
-    return u.username === "dar"
-}))
+var f = (u) => u.username === "dar"
+
+console.log(storage.find("users", f))
+
+console.log(storage.remove("users", (u) => u.username === "dar"))

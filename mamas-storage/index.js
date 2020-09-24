@@ -1,8 +1,6 @@
 const _ = require('lodash')
 const uuid = require('uuid')
 
-
-
 class InMemoryStorage{
     constructor(){
         this.storage = {}
@@ -22,7 +20,7 @@ class InMemoryStorage{
     find(collectionName, findFunc){
         var results = []
         for(var i=0; i<this.storage[collectionName].length; i++){
-            results.push(_.find(this.storage[collectionName], findFunc()))
+            results.push(_.find(this.storage[collectionName], (u) => findFunc(u)))
         }
         return results
     }
@@ -33,11 +31,14 @@ class InMemoryStorage{
 
     remove(collectionName, findFunc){
         var copyStorage = this.storage[collectionName]
+        var removed = []
         for(var i=0; i<this.storage[collectionName].length; i++){
             if(findFunc(this.storage[collectionName][i])){
+                removed.push(this.storage[collectionName][i])
                 copyStorage.splice(i, 1)
             }
         }
+        return removed
     }
 }
 
