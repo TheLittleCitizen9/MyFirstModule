@@ -26,7 +26,13 @@ class InMemoryStorage{
     }
 
     where(collectionName, where){
-
+        var results = []
+        for(var i=0; i<this.storage[collectionName].length; i++){
+            if(_.isMatch(this.storage[collectionName][i], where)){
+                results.push(this.storage[collectionName][i])
+            }
+        }
+        return results
     }
 
     remove(collectionName, findFunc){

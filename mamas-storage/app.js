@@ -9,3 +9,7 @@ var f = (u) => u.username === "dar"
 console.log(storage.find("users", f))
 
 console.log(storage.remove("users", (u) => u.username === "dar"))
+
+storage.create("users", {username: "yael", password: "CorHorse4"})
+
+console.log(storage.where("users", {username:"yael"}))
