@@ -1,63 +1,91 @@
 const inMemoryStorage = require("./index")
 
-var storage = new inMemoryStorage.InMemoryStorage()
+var storage = new inMemoryStorage.InMemorySharedStorage()
+const express = require('express')
+const { STATUS_CODES } = require("http")
+const port = 3000
+const app = express()
 
-var storage2 = new inMemoryStorage.InMemoryStorage()
+app.get('/api/users', (req, res) => {
+    var users = storage.find('users', (u) => u.firstName !== "")
+    res.send(users)
+})
 
-storage.create("users", {username: "dar", password: "CorHorse4"})
+app.post('/api/users/new', (req, res) => {
+    storage.create('users', req.params)
+    res.send('User created successfully')
+})
 
-var f = (u) => u.username === "dar"
+app.get('/api/{user-id}/tests', (req, res) => {
+    var tests = storage.find('tests', (u) => u._id === req.params.user-id)
+    res.send(tests)
+})
 
-console.log(storage.find("users", f))
+app.post('/api/{user-id}/tests/new', (req, res) => {
+    storage.create('tests', req.params)
+    res.send('Tests created successfully')
+})
 
-console.log(storage.remove("users", (u) => u.username === "dar"))
+var server = app.listen(port, function(){
+    var host = server.address().address
+    var port = server.address().port
+})
+// var storage2 = new inMemoryStorage.InMemoryStorage()
 
-storage.create("users", {username: "yael", password: "CorHorse4"})
+// storage.create("users", {username: "dar", password: "CorHorse4"})
 
-console.log(storage.where("users", {username:"yael"}))
+// var f = (u) => u.username === "dar"
 
-console.log("=====================================")
+// console.log(storage.find("users", f))
 
-storage2.create("users", {username: "dar", password: "CorHorse4"})
+// console.log(storage.remove("users", (u) => u.username === "dar"))
 
-var f = (u) => u.username === "dar"
+// storage.create("users", {username: "yael", password: "CorHorse4"})
 
-console.log(storage2.find("users", f))
+// console.log(storage.where("users", {username:"yael"}))
 
-console.log(storage2.remove("users", (u) => u.username === "dar"))
+// console.log("=====================================")
 
-storage2.create("users", {username: "yael", password: "CorHorse4"})
+// storage2.create("users", {username: "dar", password: "CorHorse4"})
 
-console.log(storage2.where("users", {username:"yael"}))
+// var f = (u) => u.username === "dar"
 
-console.log("=====================================")
+// console.log(storage2.find("users", f))
 
-var sharedStorage = new inMemoryStorage.InMemorySharedStorage()
+// console.log(storage2.remove("users", (u) => u.username === "dar"))
 
-sharedStorage.create("users", {username: "dar", password: "CorHorse4"})
+// storage2.create("users", {username: "yael", password: "CorHorse4"})
 
-var f = (u) => u.username === "dar"
+// console.log(storage2.where("users", {username:"yael"}))
 
-console.log(sharedStorage.find("users", f))
+// console.log("=====================================")
 
-console.log(sharedStorage.remove("users", (u) => u.username === "dar"))
+// var sharedStorage = new inMemoryStorage.InMemorySharedStorage()
 
-sharedStorage.create("users", {username: "yael", password: "CorHorse4"})
+// sharedStorage.create("users", {username: "dar", password: "CorHorse4"})
 
-console.log(sharedStorage.where("users", {username:"yael"}))
+// var f = (u) => u.username === "dar"
 
-console.log("=====================================")
+// console.log(sharedStorage.find("users", f))
 
-var sharedStorage2 = new inMemoryStorage.InMemorySharedStorage()
+// console.log(sharedStorage.remove("users", (u) => u.username === "dar"))
 
-sharedStorage2.create("users", {username: "dar", password: "CorHorse4"})
+// sharedStorage.create("users", {username: "yael", password: "CorHorse4"})
 
-var f = (u) => u.username === "dar"
+// console.log(sharedStorage.where("users", {username:"yael"}))
 
-console.log(sharedStorage2.find("users", f))
+// console.log("=====================================")
 
-console.log(sharedStorage2.remove("users", (u) => u.username === "dar"))
+// var sharedStorage2 = new inMemoryStorage.InMemorySharedStorage()
 
-sharedStorage2.create("users", {username: "yael", password: "CorHorse4"})
+// sharedStorage2.create("users", {username: "dar", password: "CorHorse4"})
 
-console.log(sharedStorage2.where("users", {username:"yael"}))
+// var f = (u) => u.username === "dar"
+
+// console.log(sharedStorage2.find("users", f))
+
+// console.log(sharedStorage2.remove("users", (u) => u.username === "dar"))
+
+// sharedStorage2.create("users", {username: "yael", password: "CorHorse4"})
+
+// console.log(sharedStorage2.where("users", {username:"yael"}))
