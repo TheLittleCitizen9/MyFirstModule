@@ -2,27 +2,26 @@ const inMemoryStorage = require("./index")
 
 var storage = new inMemoryStorage.InMemorySharedStorage()
 const express = require('express')
-const { STATUS_CODES } = require("http")
 const port = 3000
 const app = express()
 
 app.get('/api/users', (req, res) => {
     var users = storage.find('users', (u) => u.firstName !== "")
-    res.send(users)
+    res.send({users})
 })
 
 app.post('/api/users/new', (req, res) => {
-    storage.create('users', req.params)
+    storage.create('users', req.query)
     res.send('User created successfully')
 })
 
-app.get('/api/{user-id}/tests', (req, res) => {
-    var tests = storage.find('tests', (u) => u._id === req.params.user-id)
+app.get('/api/tests', (req, res) => {
+    var tests = storage.find('tests', (u) => u.id === req.query.id)
     res.send(tests)
 })
 
-app.post('/api/{user-id}/tests/new', (req, res) => {
-    storage.create('tests', req.params)
+app.post('/api/tests/new', (req, res) => {
+    storage.create('tests', req.query)
     res.send('Tests created successfully')
 })
 
